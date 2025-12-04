@@ -5,7 +5,7 @@ import SearchInput from "@/components/SearchInput";
 import TopPicksCarousel from "@/components/TopPicksCarousel";
 import SuggestionsGrid from "@/components/SuggestionsGrid";
 import SearchResults from "@/components/SearchResults";
-import { topPicks, suggestions, simulateAISearch, Restaurant } from "@/lib/mockData";
+import { topPicks, suggestions, searchRestaurants, Restaurant } from "@/lib/mockData";
 
 const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -16,7 +16,7 @@ const Index = () => {
     setIsLoading(true);
     setSearchQuery(query);
     try {
-      const results = await simulateAISearch(query);
+      const results = await searchRestaurants(query);
       setSearchResults(results);
     } catch (error) {
       console.error("Search failed:", error);

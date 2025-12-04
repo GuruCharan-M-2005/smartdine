@@ -1,4 +1,4 @@
-import { Star, MapPin } from "lucide-react";
+import { Star } from "lucide-react";
 import { Restaurant } from "@/lib/mockData";
 
 interface RestaurantCardProps {
@@ -24,14 +24,16 @@ const RestaurantCard = ({ restaurant, variant = "default", style }: RestaurantCa
           className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
-        <div className="absolute top-3 left-3">
-          <span className="px-2.5 py-1 text-xs font-medium bg-primary/90 text-primary-foreground rounded-full">
-            {restaurant.highlight}
-          </span>
+        <div className="absolute top-3 left-3 flex gap-2 flex-wrap">
+          {restaurant.tags.slice(0, 1).map((tag) => (
+            <span key={tag} className="px-2.5 py-1 text-xs font-medium bg-primary/90 text-primary-foreground rounded-full">
+              {tag}
+            </span>
+          ))}
         </div>
         <div className="absolute top-3 right-3">
           <span className="px-2 py-1 text-xs font-medium bg-background/80 backdrop-blur-sm text-foreground rounded-md">
-            {restaurant.priceRange}
+            ₹{restaurant.price}
           </span>
         </div>
       </div>
@@ -48,9 +50,16 @@ const RestaurantCard = ({ restaurant, variant = "default", style }: RestaurantCa
             <span className="text-sm font-medium text-foreground">{restaurant.rating}</span>
           </div>
         </div>
-        <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+        <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed mb-3">
           {restaurant.description}
         </p>
+        <div className="flex flex-wrap gap-1.5">
+          {restaurant.moods.slice(0, 3).map((mood) => (
+            <span key={mood} className="px-2 py-0.5 text-xs text-muted-foreground bg-muted/50 rounded-full">
+              {mood}
+            </span>
+          ))}
+        </div>
       </div>
     </div>
   );

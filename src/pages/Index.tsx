@@ -1,16 +1,38 @@
 import { useState } from "react";
-import Header from "@/components/Header";
+import { Link } from "react-router-dom";
+import { Sparkles, ArrowRight, MessageCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SearchInput from "@/components/SearchInput";
 import TopPicksCarousel from "@/components/TopPicksCarousel";
 import SuggestionsGrid from "@/components/SuggestionsGrid";
 import SearchResults from "@/components/SearchResults";
+import Chatbot from "@/components/Chatbot";
+import MoodPicker from "@/components/MoodPicker";
+import CuisineSelector from "@/components/CuisineSelector";
+import PriceSlider from "@/components/PriceSlider";
 import { topPicks, suggestions, searchRestaurants, Restaurant } from "@/lib/mockData";
+
+const quickCategories = [
+  { emoji: "🍕", label: "Italian", query: "Italian food" },
+  { emoji: "🍜", label: "Asian", query: "Asian cuisine" },
+  { emoji: "🌮", label: "Mexican", query: "Mexican food" },
+  { emoji: "🍣", label: "Japanese", query: "Japanese sushi" },
+  { emoji: "🍛", label: "Indian", query: "Indian curry" },
+  { emoji: "🥗", label: "Healthy", query: "Healthy food options" },
+];
 
 const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [searchResults, setSearchResults] = useState<Restaurant[] | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  
+  // Quick filters state
+  const [selectedMoods, setSelectedMoods] = useState<string[]>([]);
+  const [selectedCuisines, setSelectedCuisines] = useState<string[]>([]);
+  const [priceRange, setPriceRange] = useState<number[]>([0, 500]);
 
   const handleSearch = async (query: string) => {
     setIsLoading(true);
@@ -30,14 +52,22 @@ const Index = () => {
     setSearchQuery("");
   };
 
+  const handleQuickCategory = (query: string) => {
+    handleSearch(query);
+  };
+
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <Navbar onChatOpen={() => setIsChatOpen(true)} />
       
       <main className="container mx-auto px-4 pt-24 pb-12">
         {/* Hero Section */}
         <section className="text-center py-12 md:py-20">
           <div className="animate-fade-in">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-6">
+              <Sparkles className="w-4 h-4" />
+              <span className="text-sm font-medium">AI-Powered Recommendations</span>
+            </div>
             <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4">
               Discover Your Next
               <span className="text-gradient block">Favorite Restaurant</span>
@@ -51,6 +81,52 @@ const Index = () => {
           </div>
         </section>
 
+        {/* Quick Categories */}
+        {!searchResults && (
+          <section className="py-8 animate-fade-in" style={{ animationDelay: "300ms" }}>
+            <div className="flex flex-wrap justify-center gap-3">
+              {quickCategories.map((cat) => (
+                <button
+                  key={cat.label}
+                  onClick={() => handleQuickCategory(cat.query)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border hover:border-primary/50 hover:bg-primary/5 transition-all duration-200"
+                >
+                  <span className="text-xl">{cat.emoji}</span>
+                  <span className="text-sm text-foreground">{cat.label}</span>
+                </button>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Filters Section */}
+        {!searchResults && (
+          <section className="py-8 animate-fade-in" style={{ animationDelay: "400ms" }}>
+            <div className="card-elevated rounded-2xl p-6 space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="font-display text-xl font-bold text-foreground">Quick Filters</h2>
+                <Link to="/explore">
+                  <Button variant="ghost" className="text-primary hover:text-primary/80">
+                    Advanced Filters
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </Link>
+              </div>
+              <MoodPicker selectedMoods={selectedMoods} onMoodChange={setSelectedMoods} />
+              <CuisineSelector selectedCuisines={selectedCuisines} onCuisineChange={setSelectedCuisines} />
+              <PriceSlider value={priceRange} onChange={setPriceRange} />
+              <Button
+                onClick={() => handleSearch(`${selectedMoods.join(" ")} ${selectedCuisines.join(" ")} under ₹${priceRange[1]}`)}
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                disabled={selectedMoods.length === 0 && selectedCuisines.length === 0}
+              >
+                <Sparkles className="w-4 h-4 mr-2" />
+                Find Restaurants
+              </Button>
+            </div>
+          </section>
+        )}
+
         {/* Content Section */}
         <div className="space-y-16 mt-8">
           {searchResults ? (
@@ -61,7 +137,7 @@ const Index = () => {
             />
           ) : (
             <>
-              <div className="animate-fade-in" style={{ animationDelay: "400ms" }}>
+              <div className="animate-fade-in" style={{ animationDelay: "500ms" }}>
                 <TopPicksCarousel restaurants={topPicks} />
               </div>
               <div className="animate-fade-in" style={{ animationDelay: "600ms" }}>
@@ -70,9 +146,46 @@ const Index = () => {
             </>
           )}
         </div>
+
+        {/* CTA Section */}
+        {!searchResults && (
+          <section className="py-16 text-center animate-fade-in" style={{ animationDelay: "700ms" }}>
+            <div className="card-elevated rounded-2xl p-8 md:p-12 bg-gradient-to-br from-primary/10 to-transparent">
+              <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-4">
+                Can't decide what to eat?
+              </h2>
+              <p className="text-muted-foreground max-w-md mx-auto mb-6">
+                Chat with our AI assistant and let it help you find the perfect restaurant based on your mood!
+              </p>
+              <Button
+                onClick={() => setIsChatOpen(true)}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground"
+              >
+                <MessageCircle className="w-4 h-4 mr-2" />
+                Chat with AI
+              </Button>
+            </div>
+          </section>
+        )}
       </main>
 
       <Footer />
+
+      {/* Chat */}
+      <Chatbot
+        isOpen={isChatOpen}
+        onClose={() => setIsChatOpen(false)}
+      />
+
+      {/* Floating Chat Button */}
+      {!isChatOpen && (
+        <button
+          onClick={() => setIsChatOpen(true)}
+          className="fixed bottom-6 right-6 p-4 rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 transition-all animate-pulse-glow z-40"
+        >
+          <MessageCircle className="w-6 h-6" />
+        </button>
+      )}
     </div>
   );
 };

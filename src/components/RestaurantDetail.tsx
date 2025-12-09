@@ -2,13 +2,15 @@ import { X, Star, MapPin, Clock, Heart, Share2, ExternalLink } from "lucide-reac
 import { Button } from "@/components/ui/button";
 import { Restaurant } from "@/lib/mockData";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { useState } from "react";
+import { useFavorites } from "@/hooks/useFavorites";
 
 interface RestaurantDetailProps {
   restaurant: Restaurant | null;
-  isOpen: boolean;
   onClose: () => void;
-  isFavorite: boolean;
-  onToggleFavorite: () => void;
+  isOpen?: boolean;
+  isFavorite?: boolean;
+  onToggleFavorite?: () => void;
 }
 
 const fakeReviews = [
@@ -17,11 +19,20 @@ const fakeReviews = [
   { id: 3, name: "Anita K.", rating: 5, comment: "Best experience ever! The chef's special was incredible.", date: "2 weeks ago" },
 ];
 
-const RestaurantDetail = ({ restaurant, isOpen, onClose, isFavorite, onToggleFavorite }: RestaurantDetailProps) => {
+const RestaurantDetail = ({ restaurant, onClose, isOpen, isFavorite: externalIsFavorite, onToggleFavorite: externalToggleFavorite }: RestaurantDetailProps) => {
+  const { isFavorite: checkFavorite, toggleFavorite } = useFavorites();
+  
+  // Use external props if provided, otherwise use internal favorites
+  const isFavorite = externalIsFavorite !== undefined ? externalIsFavorite : (restaurant ? checkFavorite(restaurant.id) : false);
+  const handleToggleFavorite = externalToggleFavorite || (() => restaurant && toggleFavorite(restaurant.id));
+  
+  // If isOpen is not provided, use restaurant existence to determine open state
+  const dialogOpen = isOpen !== undefined ? isOpen : !!restaurant;
+  
   if (!restaurant) return null;
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={dialogOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto bg-card border-border p-0">
         {/* Header Image */}
         <div className="relative h-64 overflow-hidden">
@@ -35,7 +46,7 @@ const RestaurantDetail = ({ restaurant, isOpen, onClose, isFavorite, onToggleFav
             <Button
               variant="secondary"
               size="icon"
-              onClick={onToggleFavorite}
+              onClick={handleToggleFavorite}
               className="bg-background/80 backdrop-blur-sm hover:bg-background"
             >
               <Heart className={`w-5 h-5 ${isFavorite ? "fill-red-500 text-red-500" : "text-foreground"}`} />

@@ -1,12 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { X, Send, Loader2, MessageCircle, RotateCcw, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ChatMessage, sendMessageToAgent, AIResponse } from "@/lib/chatService";
+import { ChatMessage, sendMessageToAgent } from "@/lib/chatService";
 
 interface ChatbotProps {
   isOpen: boolean;
   onClose: () => void;
-  onFilterApply?: (filters: AIResponse) => void;
 }
 
 const samplePrompts = [
@@ -16,12 +15,12 @@ const samplePrompts = [
   "Cozy place for a date night",
 ];
 
-const Chatbot = ({ isOpen, onClose, onFilterApply }: ChatbotProps) => {
+const Chatbot = ({ isOpen, onClose }: ChatbotProps) => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: "welcome",
       role: "assistant",
-      content: "Hi! I'm your SmartDine assistant. Tell me what you're craving, and I'll find the perfect restaurant for you! 🍽️",
+      content: "Hi! I'm your SmartDine assistant. Tell me what you're craving, and I'll help you find the perfect restaurant! 🍽️",
       timestamp: new Date(),
     },
   ]);
@@ -53,16 +52,11 @@ const Chatbot = ({ isOpen, onClose, onFilterApply }: ChatbotProps) => {
       const assistantMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: formatAIResponse(response),
+        content: response,
         timestamp: new Date(),
-        restaurantData: response,
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
-      
-      if (onFilterApply) {
-        onFilterApply(response);
-      }
     } catch (error) {
       const errorMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
@@ -76,39 +70,19 @@ const Chatbot = ({ isOpen, onClose, onFilterApply }: ChatbotProps) => {
     }
   };
 
-  const formatAIResponse = (data: AIResponse): string => {
-    const parts: string[] = ["I found some great options for you! Here's what I'm looking for:"];
-    
-    if (data.mood?.length) {
-      parts.push(`• Mood: ${data.mood.join(", ")}`);
-    }
-    if (data.cuisine?.length) {
-      parts.push(`• Cuisine: ${data.cuisine.join(", ")}`);
-    }
-    if (data.price) {
-      if (data.price.min && data.price.max) {
-        parts.push(`• Price: ₹${data.price.min} - ₹${data.price.max}`);
-      } else if (data.price.max) {
-        parts.push(`• Price: Under ₹${data.price.max}`);
-      }
-    }
-    if (data.features?.length) {
-      parts.push(`• Features: ${data.features.join(", ")}`);
-    }
-    
-    parts.push("\nCheck out the results on the Explore page!");
-    return parts.join("\n");
-  };
-
   const handleReset = () => {
     setMessages([
       {
         id: "welcome",
         role: "assistant",
-        content: "Hi! I'm your SmartDine assistant. Tell me what you're craving, and I'll find the perfect restaurant for you! 🍽️",
+        content: "Hi! I'm your SmartDine assistant. Tell me what you're craving, and I'll help you find the perfect restaurant! 🍽️",
         timestamp: new Date(),
       },
     ]);
+  };
+
+  const handlePromptClick = (prompt: string) => {
+    setInput(prompt);
   };
 
   if (!isOpen) return null;
@@ -181,7 +155,7 @@ const Chatbot = ({ isOpen, onClose, onFilterApply }: ChatbotProps) => {
               {samplePrompts.map((prompt) => (
                 <button
                   key={prompt}
-                  onClick={() => setInput(prompt)}
+                  onClick={() => handlePromptClick(prompt)}
                   className="px-3 py-1.5 text-xs bg-muted/50 hover:bg-muted text-muted-foreground rounded-full transition-colors"
                 >
                   {prompt}
@@ -199,7 +173,7 @@ const Chatbot = ({ isOpen, onClose, onFilterApply }: ChatbotProps) => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSend()}
-              placeholder="Type your craving..."
+              placeholder="Type your message..."
               className="flex-1 bg-muted rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary/50"
             />
             <Button

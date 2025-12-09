@@ -1,7 +1,8 @@
-import { useRef } from "react";
+import { useState, useRef } from "react";
 import { ChevronLeft, ChevronRight, Flame } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import RestaurantCard from "./RestaurantCard";
+import RestaurantDetail from "./RestaurantDetail";
 import { Restaurant } from "@/lib/mockData";
 
 interface TopPicksCarouselProps {
@@ -10,6 +11,7 @@ interface TopPicksCarouselProps {
 
 const TopPicksCarousel = ({ restaurants }: TopPicksCarouselProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
@@ -55,7 +57,12 @@ const TopPicksCarousel = ({ restaurants }: TopPicksCarouselProps) => {
         style={{ scrollSnapType: "x mandatory" }}
       >
         {restaurants.map((restaurant, index) => (
-          <div key={restaurant.id} style={{ scrollSnapAlign: "start" }}>
+          <div
+            key={restaurant.id}
+            style={{ scrollSnapAlign: "start" }}
+            className="cursor-pointer"
+            onClick={() => setSelectedRestaurant(restaurant)}
+          >
             <RestaurantCard
               restaurant={restaurant}
               variant="featured"
@@ -64,6 +71,14 @@ const TopPicksCarousel = ({ restaurants }: TopPicksCarouselProps) => {
           </div>
         ))}
       </div>
+
+      {/* Restaurant Detail Modal */}
+      {selectedRestaurant && (
+        <RestaurantDetail
+          restaurant={selectedRestaurant}
+          onClose={() => setSelectedRestaurant(null)}
+        />
+      )}
     </section>
   );
 };

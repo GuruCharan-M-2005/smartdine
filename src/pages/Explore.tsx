@@ -13,7 +13,6 @@ import SortDropdown, { SortOption } from "@/components/SortDropdown";
 import Chatbot from "@/components/Chatbot";
 import { restaurants, Restaurant } from "@/lib/mockData";
 import { useFavorites } from "@/hooks/useFavorites";
-import { AIResponse } from "@/lib/chatService";
 
 const ITEMS_PER_PAGE = 15;
 
@@ -100,16 +99,6 @@ const Explore = () => {
   const handleRestaurantClick = (restaurant: Restaurant) => {
     setSelectedRestaurant(restaurant);
     setIsDetailOpen(true);
-  };
-
-  const handleFilterApply = (filters: AIResponse) => {
-    if (filters.mood) setSelectedMoods(filters.mood);
-    if (filters.cuisine) setSelectedCuisines(filters.cuisine);
-    if (filters.price) {
-      setPriceRange([filters.price.min || 0, filters.price.max || 500]);
-    }
-    if (filters.features) setSelectedFeatures(filters.features);
-    setCurrentPage(1);
   };
 
   return (
@@ -225,7 +214,6 @@ const Explore = () => {
       <Chatbot
         isOpen={isChatOpen}
         onClose={() => setIsChatOpen(false)}
-        onFilterApply={handleFilterApply}
       />
 
       {/* Floating Chat Button */}

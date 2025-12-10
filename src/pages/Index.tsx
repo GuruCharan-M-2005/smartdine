@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Sparkles, ArrowRight, MessageCircle } from "lucide-react";
+import { Sparkles, ArrowRight, MessageCircle, Shuffle, X } from "lucide-react";
+import RestaurantCard from "@/components/RestaurantCard";
+import RestaurantDetail from "@/components/RestaurantDetail";
+import { restaurants } from "@/lib/mockData";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -33,6 +36,19 @@ const Index = () => {
   const [selectedMoods, setSelectedMoods] = useState<string[]>([]);
   const [selectedCuisines, setSelectedCuisines] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<number[]>([0, 500]);
+  
+  // Surprise Me state
+  const [surpriseRestaurant, setSurpriseRestaurant] = useState<Restaurant | null>(null);
+  const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
+
+  const handleSurpriseMe = () => {
+    const randomIndex = Math.floor(Math.random() * restaurants.length);
+    setSurpriseRestaurant(restaurants[randomIndex]);
+  };
+
+  const handleCloseSurprise = () => {
+    setSurpriseRestaurant(null);
+  };
 
   const handleSearch = async (query: string) => {
     setIsLoading(true);
@@ -79,7 +95,56 @@ const Index = () => {
           <div className="animate-fade-in" style={{ animationDelay: "200ms" }}>
             <SearchInput onSearch={handleSearch} isLoading={isLoading} />
           </div>
+          
+          {/* Surprise Me Button */}
+          <div className="animate-fade-in mt-6" style={{ animationDelay: "250ms" }}>
+            <Button
+              onClick={handleSurpriseMe}
+              variant="outline"
+              size="lg"
+              className="border-primary/30 hover:bg-primary/10 hover:border-primary/50"
+            >
+              <Shuffle className="w-5 h-5 mr-2" />
+              Surprise Me
+            </Button>
+          </div>
+          
+          {/* Surprise Restaurant Card */}
+          {surpriseRestaurant && (
+            <div className="animate-fade-in mt-8 max-w-2xl mx-auto">
+              <div className="relative">
+                <button
+                  onClick={handleCloseSurprise}
+                  className="absolute -top-3 -right-3 z-10 p-2 rounded-full bg-card border border-border shadow-md hover:bg-muted transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+                <div 
+                  className="cursor-pointer transform hover:scale-[1.02] transition-transform"
+                  onClick={() => setSelectedRestaurant(surpriseRestaurant)}
+                >
+                  <RestaurantCard restaurant={surpriseRestaurant} variant="featured" />
+                </div>
+              </div>
+              <Button
+                onClick={handleSurpriseMe}
+                variant="ghost"
+                className="mt-4 text-primary hover:text-primary/80"
+              >
+                <Shuffle className="w-4 h-4 mr-2" />
+                Try Another
+              </Button>
+            </div>
+          )}
         </section>
+
+        {/* Restaurant Detail Modal */}
+        {selectedRestaurant && (
+          <RestaurantDetail
+            restaurant={selectedRestaurant}
+            onClose={() => setSelectedRestaurant(null)}
+          />
+        )}
 
         {/* Quick Categories */}
         {!searchResults && (

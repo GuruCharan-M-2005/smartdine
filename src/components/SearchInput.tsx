@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, Sparkles, Loader2 } from "lucide-react";
+import { Search, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface SearchInputProps {
@@ -29,7 +29,7 @@ const SearchInput = ({ onSearch, isLoading }: SearchInputProps) => {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="I want something cozy and spicy..."
+            placeholder="Search restaurants by name..."
             className="flex-1 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground py-3 text-base"
           />
           <Button
@@ -41,15 +41,15 @@ const SearchInput = ({ onSearch, isLoading }: SearchInputProps) => {
               <Loader2 className="w-5 h-5 animate-spin" />
             ) : (
               <>
-                <Sparkles className="w-4 h-4 mr-2" />
-                Find Restaurants
+                <Search className="w-4 h-4 mr-2" />
+                Search
               </>
             )}
           </Button>
         </div>
       </div>
       <div className="flex flex-wrap justify-center gap-2 mt-4">
-        {["Cozy dinner", "Spicy food", "Healthy options", "Date night"].map((suggestion) => (
+        {["Dragon", "Sakura", "Curry", "Spice", "Garden"].map((suggestion) => (
           <button
             key={suggestion}
             type="button"

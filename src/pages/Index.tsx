@@ -50,17 +50,12 @@ const Index = () => {
     setSurpriseRestaurant(null);
   };
 
-  const handleSearch = async (query: string) => {
+  const handleSearch = (query: string) => {
     setIsLoading(true);
     setSearchQuery(query);
-    try {
-      const results = await searchRestaurants(query);
-      setSearchResults(results);
-    } catch (error) {
-      console.error("Search failed:", error);
-    } finally {
-      setIsLoading(false);
-    }
+    const results = searchRestaurants(query);
+    setSearchResults(results);
+    setIsLoading(false);
   };
 
   const handleBack = () => {

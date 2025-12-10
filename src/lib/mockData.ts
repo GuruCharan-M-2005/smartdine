@@ -620,26 +620,12 @@ export const topPicks: Restaurant[] = restaurants.filter(r => r.rating >= 4.8).s
 // Get suggestions (varied selection)
 export const suggestions: Restaurant[] = restaurants.filter(r => r.rating < 4.8).slice(0, 12);
 
-// API function to call n8n
-export const searchRestaurants = async (message: string): Promise<Restaurant[]> => {
-  try {
-    const response = await fetch("YOUR_N8N_WEBHOOK_URL", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ message }),
-    });
-    
-    if (!response.ok) {
-      throw new Error("API request failed");
-    }
-    
-    const data = await response.json();
-    return Array.isArray(data) ? data : [data];
-  } catch (error) {
-    console.error("Search API error:", error);
-    // Fallback to mock data for development
-    return restaurants.slice(0, 6);
-  }
+// Simple local search by restaurant name
+export const searchRestaurants = (query: string): Restaurant[] => {
+  const searchTerm = query.toLowerCase().trim();
+  if (!searchTerm) return [];
+  
+  return restaurants.filter(r => 
+    r.name.toLowerCase().includes(searchTerm)
+  );
 };

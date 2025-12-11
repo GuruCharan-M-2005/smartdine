@@ -5,12 +5,9 @@ export interface ChatMessage {
   timestamp: Date;
 }
 
-// Replace with your n8n webhook URL
-const N8N_WEBHOOK_URL = "YOUR_N8N_WEBHOOK_URL";
-
 export const sendMessageToAgent = async (message: string): Promise<string> => {
   try {
-    const response = await fetch(N8N_WEBHOOK_URL, {
+    const response = await fetch("http://localhost:5000/api/recommend", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -22,11 +19,16 @@ export const sendMessageToAgent = async (message: string): Promise<string> => {
       throw new Error("Failed to get response from AI agent");
     }
 
-    const data = await response.text();
-    return data;
+    let data: any;
+    try {
+      data = await response.json();
+    } catch (err) {
+      throw new Error("Response was not valid JSON");
+    }
+    return data["text"];
+
   } catch (error) {
-    console.error("Chat error:", error);
-    // Fallback mock response for demo
+    console.error("CHAT SERVICE → Fatal error:", error);
     return "I'm having trouble connecting right now. Please try again later!";
   }
 };

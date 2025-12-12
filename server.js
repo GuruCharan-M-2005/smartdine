@@ -47,12 +47,17 @@ app.post("/api/recommend", async (req, res) => {
 User said: "${userMessage}"
 
 Your tasks:
-1. Extract mood, cuisine, price, and extra preference.
-2. Based on this restaurant list:
+1. Extract mood, cuisine, price, and any extra preference from the user message. Do NOT output this extraction.
+2. Using the restaurant list below, pick 2–4 restaurants that best match the user's needs.
 ${JSON.stringify(restaurants)}
 
-3. Recommend 2–4 restaurants with explanations.
-4. Return friendly human text only.
+3. For each recommended restaurant, output ONLY:
+- Restaurant Name
+- Cuisine
+- Price
+
+4. No descriptions, no images, no mood tags, no summaries of what you extracted, and no additional text before or after the recommendations. Just the list as plain friendly human text.
+
 `;
     const completion = await openRouter.chat.send({
       model: "openai/gpt-4o-mini",

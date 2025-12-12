@@ -72,8 +72,8 @@ ${JSON.stringify(restaurants)}
     res.status(500).json({ error: err.message });
   }
 });
-
-app.listen(5000, () => {
+const PORT = process.env.PORT || 5000
+app.listen(PORT, () => {
   console.log("Build before running");
   console.log("Project running at http://localhost:5000");
 });

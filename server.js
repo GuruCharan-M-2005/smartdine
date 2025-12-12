@@ -27,10 +27,11 @@ const restaurants = JSON.parse(fs.readFileSync("./restaurants.json", "utf8"));
 
 const openRouter = new OpenRouter({
   apiKey: process.env.OPENROUTER_API_KEY,
-  defaultHeaders: {
-    "HTTP-Referer": "http://localhost:8080",
-    "X-Title": "Mood Restaurant AI",
-  },
+  // defaultHeaders: {
+  //   "HTTP-Referer": "http://localhost:8080", // for local
+  // "HTTP-Referer": "https://smartdine-by-gc.onrender.com",  // for deployed
+  //   "X-Title": "Mood Restaurant AI",
+  // },
 });
 
 
@@ -72,9 +73,10 @@ ${JSON.stringify(restaurants)}
     res.status(500).json({ error: err.message });
   }
 });
-const PORT = 5000;
+
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log("Build before running");
-  console.log("Project running at http://localhost:5000");
+  console.log(`Server running on port ${PORT}`);
 });
+
 

@@ -7,7 +7,7 @@ export interface ChatMessage {
 
 export const sendMessageToAgent = async (message: string): Promise<string> => {
   try {
-    const response = await fetch("http://localhost:5000/api/recommend", {
+    const response = await fetch("/api/recommend", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

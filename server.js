@@ -51,12 +51,16 @@ Your tasks:
 2. Using the restaurant list below, pick 2–4 restaurants that best match the user's needs.
 ${JSON.stringify(restaurants)}
 
-3. For each recommended restaurant, output ONLY:
+3. Start your answer with: "Here’s what I found:"
+4. For each recommended restaurant, output ONLY:
 - Restaurant Name
 - Cuisine
 - Price
 
-4. No descriptions, no images, no mood tags, no summaries of what you extracted, and no additional text before or after the recommendations. Just the list as plain friendly human text.
+5. End your message with: 'Try "First restaurant"' where "First restaurant" is the name of the top recommendation.
+
+6. No descriptions, no images, no mood tags, no summaries of what you extracted, and no extra commentary. Just clean, friendly human text.
+
 
 `;
     const completion = await openRouter.chat.send({

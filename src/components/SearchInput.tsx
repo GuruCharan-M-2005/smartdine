@@ -35,14 +35,14 @@ const SearchInput = ({ onSearch, isLoading }: SearchInputProps) => {
           <Button
             type="submit"
             disabled={isLoading || !query.trim()}
-            className="btn-glow bg-primary hover:bg-primary/90 text-primary-foreground font-medium px-6 py-5 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="btn-glow bg-primary hover:bg-primary/90 text-primary-foreground font-medium px-4 sm:px-6 py-5 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
             ) : (
               <>
-                <Search className="w-4 h-4 mr-2" />
-                Search
+                <Search className="w-4 h-4 sm:mr-2" />
+                <span className="hidden sm:inline">Search</span>
               </>
             )}
           </Button>

@@ -12,24 +12,24 @@ interface SearchResultsProps {
 const SearchResults = ({ results, query, onBack }: SearchResultsProps) => {
   return (
     <section className="animate-fade-in">
-      <div className="flex items-center gap-4 mb-6">
+      <div className="flex items-center gap-2 sm:gap-4 mb-6">
         <Button
           variant="ghost"
           size="icon"
           onClick={onBack}
-          className="rounded-full hover:bg-muted"
+          className="rounded-full hover:bg-muted flex-shrink-0 h-8 w-8 sm:h-10 sm:w-10"
         >
-          <ArrowLeft className="w-5 h-5" />
+          <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
         </Button>
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-primary/10">
-            <Search className="w-5 h-5 text-primary" />
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="p-1.5 sm:p-2 rounded-lg bg-primary/10 flex-shrink-0">
+            <Search className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
           </div>
-          <div>
-            <h2 className="font-display text-2xl font-bold text-foreground">
+          <div className="min-w-0">
+            <h2 className="font-display text-lg sm:text-2xl font-bold text-foreground truncate">
               Results for "{query}"
             </h2>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs sm:text-sm text-muted-foreground">
               {results.length} restaurant{results.length !== 1 ? "s" : ""} found
             </p>
           </div>

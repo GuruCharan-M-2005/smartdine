@@ -106,13 +106,13 @@ const Index = () => {
           
           {/* Surprise Restaurant Card */}
           {surpriseRestaurant && (
-            <div className="animate-fade-in mt-8 max-w-2xl mx-auto">
+            <div className="animate-fade-in mt-6 sm:mt-8 max-w-sm sm:max-w-2xl mx-auto px-2 sm:px-0">
               <div className="relative">
                 <button
                   onClick={handleCloseSurprise}
-                  className="absolute -top-3 -right-3 z-10 p-2 rounded-full bg-card border border-border shadow-md hover:bg-muted transition-colors"
+                  className="absolute -top-2 -right-2 sm:-top-3 sm:-right-3 z-10 p-1.5 sm:p-2 rounded-full bg-card border border-border shadow-md hover:bg-muted transition-colors"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-3 h-3 sm:w-4 sm:h-4" />
                 </button>
                 <div 
                   className="cursor-pointer transform hover:scale-[1.02] transition-transform"
@@ -124,7 +124,8 @@ const Index = () => {
               <Button
                 onClick={handleSurpriseMe}
                 variant="ghost"
-                className="mt-4 text-primary hover:text-primary/80"
+                size="sm"
+                className="mt-3 sm:mt-4 text-primary hover:text-primary/80"
               >
                 <Shuffle className="w-4 h-4 mr-2" />
                 Try Another
@@ -143,16 +144,16 @@ const Index = () => {
 
         {/* Quick Categories */}
         {!searchResults && (
-          <section className="py-8 animate-fade-in" style={{ animationDelay: "300ms" }}>
-            <div className="flex flex-wrap justify-center gap-3">
+          <section className="py-6 sm:py-8 animate-fade-in" style={{ animationDelay: "300ms" }}>
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
               {quickCategories.map((cat) => (
                 <button
                   key={cat.label}
                   onClick={() => handleQuickCategory(cat.query)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border hover:border-primary/50 hover:bg-primary/5 transition-all duration-200"
+                  className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-card border border-border hover:border-primary/50 hover:bg-primary/5 transition-all duration-200"
                 >
-                  <span className="text-xl">{cat.emoji}</span>
-                  <span className="text-sm text-foreground">{cat.label}</span>
+                  <span className="text-lg sm:text-xl">{cat.emoji}</span>
+                  <span className="text-xs sm:text-sm text-foreground">{cat.label}</span>
                 </button>
               ))}
             </div>
@@ -161,14 +162,15 @@ const Index = () => {
 
         {/* Filters Section */}
         {!searchResults && (
-          <section className="py-8 animate-fade-in" style={{ animationDelay: "400ms" }}>
-            <div className="card-elevated rounded-2xl p-6 space-y-6">
-              <div className="flex items-center justify-between">
-                <h2 className="font-display text-xl font-bold text-foreground">Quick Filters</h2>
+          <section className="py-6 sm:py-8 animate-fade-in" style={{ animationDelay: "400ms" }}>
+            <div className="card-elevated rounded-xl sm:rounded-2xl p-4 sm:p-6 space-y-4 sm:space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <h2 className="font-display text-lg sm:text-xl font-bold text-foreground">Quick Filters</h2>
                 <Link to="/explore">
-                  <Button variant="ghost" className="text-primary hover:text-primary/80">
-                    Advanced Filters
-                    <ArrowRight className="w-4 h-4 ml-2" />
+                  <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80 -ml-2 sm:ml-0">
+                    <span className="hidden sm:inline">Advanced Filters</span>
+                    <span className="sm:hidden">More</span>
+                    <ArrowRight className="w-4 h-4 ml-1 sm:ml-2" />
                   </Button>
                 </Link>
               </div>
@@ -209,12 +211,12 @@ const Index = () => {
 
         {/* CTA Section */}
         {!searchResults && (
-          <section className="py-16 text-center animate-fade-in" style={{ animationDelay: "700ms" }}>
-            <div className="card-elevated rounded-2xl p-8 md:p-12 bg-gradient-to-br from-primary/10 to-transparent">
-              <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-4">
+          <section className="py-10 sm:py-16 text-center animate-fade-in" style={{ animationDelay: "700ms" }}>
+            <div className="card-elevated rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-12 bg-gradient-to-br from-primary/10 to-transparent">
+              <h2 className="font-display text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-3 sm:mb-4">
                 Can't decide what to eat?
               </h2>
-              <p className="text-muted-foreground max-w-md mx-auto mb-6">
+              <p className="text-sm sm:text-base text-muted-foreground max-w-md mx-auto mb-4 sm:mb-6">
                 Chat with our AI assistant and let it help you find the perfect restaurant based on your mood!
               </p>
               <Button
@@ -241,9 +243,9 @@ const Index = () => {
       {!isChatOpen && (
         <button
           onClick={() => setIsChatOpen(true)}
-          className="fixed bottom-6 right-6 p-4 rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 transition-all animate-pulse-glow z-40"
+          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 p-3 sm:p-4 rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 transition-all animate-pulse-glow z-40"
         >
-          <MessageCircle className="w-6 h-6" />
+          <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
       )}
     </div>

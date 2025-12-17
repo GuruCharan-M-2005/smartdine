@@ -29,26 +29,28 @@ const SuggestionsGrid = ({ restaurants: initialRestaurants, title = "Discover" }
 
   return (
     <section>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-lg bg-primary/10">
             <Sparkles className="w-5 h-5 text-primary" />
           </div>
-          <h2 className="font-display text-2xl font-bold text-foreground">{title}</h2>
+          <h2 className="font-display text-xl sm:text-2xl font-bold text-foreground">{title}</h2>
         </div>
         <div className="flex gap-2">
           <Button
             onClick={handleSurpriseMe}
             variant="outline"
+            size="sm"
             className="border-primary/30 hover:bg-primary/10 hover:border-primary/50"
           >
-            <Shuffle className="w-4 h-4 mr-2" />
-            Surprise Me
+            <Shuffle className="w-4 h-4 sm:mr-2" />
+            <span className="hidden sm:inline">Surprise Me</span>
           </Button>
           {isSurprised && (
             <Button
               onClick={handleReset}
               variant="ghost"
+              size="sm"
               className="text-muted-foreground hover:text-foreground"
             >
               Reset
